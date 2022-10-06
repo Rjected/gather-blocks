@@ -43,6 +43,8 @@ pub struct RunArgs {
     end_block: String,
 }
 
+// TODO: a read cli tool that can read from a directory of files produced by this writing tool
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // parse CLI arguments

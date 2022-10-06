@@ -261,10 +261,6 @@ mod tests {
             if buf != "test" {
                 std::fs::remove_file("second_test.0").unwrap();
                 std::fs::remove_file("second_test.10").unwrap();
-                // print the buf
-                println!("{:?}", buf);
-                // print the test as bytes
-                println!("{:?}", "test".as_bytes());
                 panic!("The reader did not read the correct data");
             }
         }
