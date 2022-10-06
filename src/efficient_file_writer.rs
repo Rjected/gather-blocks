@@ -1,6 +1,6 @@
 use std::{
     fs::File,
-    io::{BufReader, BufWriter, Read, Write, BufRead},
+    io::{BufRead, BufReader, BufWriter, Read, Write},
     path::Path,
 };
 
@@ -240,7 +240,8 @@ mod tests {
     #[test]
     fn temp_file_write_read_test() {
         // create a writer
-        let mut writer = EfficientFileWriter::new("second_test".to_string(), 10, Path::new(".")).unwrap();
+        let mut writer =
+            EfficientFileWriter::new("second_test".to_string(), 10, Path::new(".")).unwrap();
         // write to the writer
         for _ in 0..11 {
             writer.write("test".as_bytes()).unwrap();
@@ -251,7 +252,8 @@ mod tests {
         assert!(Path::new("second_test.0").exists());
 
         // create a reader
-        let mut reader = EfficientFileReader::new("second_test".to_string(), 10, Path::new(".")).unwrap();
+        let mut reader =
+            EfficientFileReader::new("second_test".to_string(), 10, Path::new(".")).unwrap();
 
         // read from the reader
         for _ in 0..11 {
