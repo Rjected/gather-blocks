@@ -88,9 +88,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // panic if the block is None and return the proper cURL command to get the block from the archive node
         if block.is_none() {
-            // convert the websocket URL to an HTTP URL for the provider
-            let http_url = opts.rpc_url.replace("ws", "http");
-            panic!("Block {} not found. Try running this command to get the block from the archive node: curl -X POST -H \"Content-Type: application/json\" --data '{{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockByNumber\",\"params\":[\"{}\", true],\"id\":1}}' {}", block_number, block_number, &opts.rpc_url);
+            // convert the websocket URL to an HTTP URL for the provider, making sure not to
+            // corrupt the URL if the key contains the substring "ws" or "wss do this by replacing
+            // only the first occurrence of "ws" or "wss" with "http" or "https" respectively
+            let http_url = opts
+                .rpc_url
+                .replacen("ws", "http", 1)
+                .replacen("wss", "https", 1);
+            panic!("Block {} not found. Try running this command to get the block from the archive node: curl -X POST -H \"Content-Type: application/json\" --data '{{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBlockByNumber\",\"params\":[\"{}\", true],\"id\":1}}' {}", block_number, block_number, &http_url);
         }
         let block = block.unwrap();
 
@@ -102,7 +107,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             if uncle.is_none() {
                 // convert the websocket URL to an HTTP URL for the provider
-                let http_url = opts.rpc_url.replace("ws", "http");
+                let http_url = opts
+                    .rpc_url
+                    .replacen("ws", "http", 1)
+                    .replacen("wss", "https", 1);
                 panic!("Uncle {:?} not found. Try running this command to get the uncle from the archive node: curl -X POST -H \"Content-Type: application/json\" --data '{{\"jsonrpc\":\"2.0\",\"method\":\"eth_getUncleByBlockHashAndIndex\",\"params\":[\"{}\", \"{}\"],\"id\":1}}' {}", uncle_hash, block_number, index, &http_url);
             }
             let uncle = uncle.unwrap();
