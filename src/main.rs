@@ -95,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         // get a Vec<anvil_core::eth::Header> from the uncle hashes in the returned block
         let mut ommers: Vec<Header> = Vec::new();
         for (index, uncle_hash) in block.uncles.iter().enumerate() {
-            // use the alchemy eth_getUncleByBlockNumberAndIndex method to get the uncle header
+            // use the eth_getUncleByBlockNumberAndIndex method to get the uncle header
             let uncle = provider.get_uncle(block_number, index.into()).await?;
 
             if uncle.is_none() {
